@@ -1,0 +1,324 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <main class="content">
+        <section class="slider">
+            <div data-slider>
+                <div class="slider__item">
+                    <img src="./images/slider_img2.jpg" alt="Slide">
+
+                    <div class="slider__caption">
+                        <div class="slider__caption__title">
+                            <p>32 комплекса с пентхаусами</p>
+                        </div>
+
+                        <div class="slider__caption__text">
+                            <p>Для тех, кто любит жить ближе к солнцу, мы собрали<br>все новостройки с пентхаусами в одном месте</p>
+                        </div>
+                        
+                        <div class="slider__buttons">
+                            <a href="#" class="button button--t1 button--s1">Подобрать недвижимость</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slider__item">
+                    <img src="./images/slider_img.jpg" alt="Slide">
+
+                    <div class="slider__caption">
+                        <div class="slider__caption__title">
+                            <p>32 комплекса с пентхаусами 32 комплекса с пентхаусами</p>
+                        </div>
+
+                        <div class="slider__caption__text">
+                            <p>Для тех, кто любит жить ближе к солнцу, мы собрали<br>все новостройки с пентхаусами в одном месте</p>
+                        </div>
+
+                        <div class="slider__buttons">
+                            <a href="#" class="button button--t1 button--s1">Подобрать недвижимость</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slider__item">
+                    <img src="./images/slider_img3.jpg" alt="Slide">
+
+                    <div class="slider__caption">
+                        <div class="slider__caption__title">
+                            <p>32 комплекса с пентхаусами</p>
+                        </div>
+
+                        <div class="slider__caption__text">
+                            <p>Для тех, кто любит жить ближе к солнцу, мы собрали<br>все новостройки с пентхаусами в одном месте</p>
+                        </div>
+
+                        <div class="slider__buttons">
+                            <a href="#" class="button button--t1 button--s1">Подобрать недвижимость</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="products">
+            <div class="container">
+                <div class="products__heading">
+                    <h1>Выберите квартиру или апартаменты<br>
+                        в одном из лучших жилых комплексов Москвы</h1>
+                </div>
+
+                <div class="products__layout">
+                    <div class="products__filter">
+                        <div class="products__filter__title">
+                            <p>﻿Продаж / Оренда</p>
+                        </div>
+
+                        <div class="products__filter__section">
+                            <div class="products__filter__input">
+                                <input type="checkbox" id="flats">
+                                <label for="flats">квартири</label>
+                            </div>
+
+                            <div class="products__filter__input">
+                                <input type="checkbox" id="ap">
+                                <label for="ap">будинки</label>
+                            </div>
+
+                            <div class="products__filter__input">
+                                <input type="checkbox" id="ap2">
+                                <label for="ap2">пропозиції від забудовників</label>
+                            </div>
+
+                            <div class="products__filter__input">
+                                <input type="checkbox" id="ap3">
+                                <label for="ap3">земельні ділянки</label>
+                            </div>
+
+                            <div class="products__filter__input">
+                                <input type="checkbox" id="ap4">
+                                <label for="ap4">комерційна нерухомість</label>
+                            </div>
+                        </div>
+
+                        <div class="products__filter__section">
+                            <div class="products__filter__range">
+                                <p class="products__filter__range__title">Цiна</p>
+                                <input type="range" step="10" value="50" min="10" max="100" data-rangeslider>
+                            </div>
+                        </div>
+
+                        <div class="products__filter__section">
+                            <div class="products__filter__input">
+                                <input type="checkbox" id="flats3">
+                                <label for="flats3">только с пентхаусами <span>(41)</span></label>
+                            </div>
+
+                            <div class="products__filter__input">
+                                <input type="checkbox" id="apartments3">
+                                <label for="apartments3">только с террасами <span>(35)</span></label>
+                            </div>
+
+                            <div class="products__filter__input">
+                                <input type="checkbox" id="flats4">
+                                <label for="flats4">только лофты <span>(53)</span></label>
+                            </div>
+                        </div>
+
+                        <div class="products__filter__order">
+                            <div class="products__filter__order__image-holder">
+                                <img src="./images/expert_img.png" alt="Expert">
+                            </div>
+
+                            <div class="products__filter__order__text">
+                                <p>Евгений</p>
+                                <p>Эксперт проекта</p>
+                            </div>
+
+                            <div class="products__filter__order__buttons">
+                                <p class="products__filter__order__buttons__desc">Нажмите на кнопку и эксперт проекта за 25 минут бесплатно подберет вам 2-5 подходящих жилых комплекса</p>
+                                <a href="#" class="button button--s2 button--t1">Заказать подбор</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="products__list">
+                        <div class="products__item">
+                            <div class="products__item__image-holder">
+                                <a href="#"><img src="./images/product_img.jpg" alt="Product"></a>
+                            </div>
+
+                            <div class="products__item__content">
+                                <div class="products__item__title">
+                                    <a href="#">Брюсов, 19</a>
+                                </div>
+
+                                <div class="products__item__type">
+                                    <p>квартиры</p>
+                                </div>
+
+                                <div class="products__item__desc">
+                                    <p>Брюсов, 19 — клубный дом с квартирами и пентхаусами на третьей линии домов от Тверской улицы.</p>
+                                </div>
+
+                                <div class="products__item__price">
+                                    <p>Цена по запросу</p>
+                                </div>
+
+                                <div class="products__item__footer">
+                                    <div class="products__item__place">
+                                        <p>Тверской</p>
+                                    </div>
+
+                                    <div class="products__item__buttons">
+                                        <a href="#" class="button button--s3 button--t1">Узнать подробнее</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="products__item">
+                            <div class="products__item__image-holder">
+                                <a href="#"><img src="./images/product_img.jpg" alt="Product"></a>
+                            </div>
+
+                            <div class="products__item__content">
+                                <div class="products__item__title">
+                                    <a href="#">Брюсов, 19</a>
+                                </div>
+
+                                <div class="products__item__type">
+                                    <p>квартиры</p>
+                                </div>
+
+                                <div class="products__item__desc">
+                                    <p>Брюсов, 19 — клубный дом с квартирами и пентхаусами на третьей линии домов от Тверской улицы.</p>
+                                </div>
+
+                                <div class="products__item__price">
+                                    <p>Цена по запросу</p>
+                                </div>
+
+                                <div class="products__item__footer">
+                                    <div class="products__item__place">
+                                        <p>Тверской</p>
+                                    </div>
+
+                                    <div class="products__item__buttons">
+                                        <a href="#" class="button button--s3 button--t1">Узнать подробнее</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="products__item">
+                            <div class="products__item__image-holder">
+                                <a href="#"><img src="./images/product_img.jpg" alt="Product"></a>
+                            </div>
+
+                            <div class="products__item__content">
+                                <div class="products__item__title">
+                                    <a href="#">Брюсов, 19</a>
+                                </div>
+
+                                <div class="products__item__type">
+                                    <p>квартиры</p>
+                                </div>
+
+                                <div class="products__item__desc">
+                                    <p>Брюсов, 19 — клубный дом с квартирами и пентхаусами на третьей линии домов от Тверской улицы.</p>
+                                </div>
+
+                                <div class="products__item__price">
+                                    <p>Цена по запросу</p>
+                                </div>
+
+                                <div class="products__item__footer">
+                                    <div class="products__item__place">
+                                        <p>Тверской</p>
+                                    </div>
+
+                                    <div class="products__item__buttons">
+                                        <a href="#" class="button button--s3 button--t1">Узнать подробнее</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="products__item">
+                            <div class="products__item__image-holder">
+                                <a href="#"><img src="./images/product_img.jpg" alt="Product"></a>
+                            </div>
+
+                            <div class="products__item__content">
+                                <div class="products__item__title">
+                                    <a href="#">Брюсов, 19</a>
+                                </div>
+
+                                <div class="products__item__type">
+                                    <p>квартиры</p>
+                                </div>
+
+                                <div class="products__item__desc">
+                                    <p>Брюсов, 19 — клубный дом с квартирами и пентхаусами на третьей линии домов от Тверской улицы.</p>
+                                </div>
+
+                                <div class="products__item__price">
+                                    <p>Цена по запросу</p>
+                                </div>
+
+                                <div class="products__item__footer">
+                                    <div class="products__item__place">
+                                        <p>Тверской</p>
+                                    </div>
+
+                                    <div class="products__item__buttons">
+                                        <a href="#" class="button button--s3 button--t1">Узнать подробнее</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="products__item">
+                            <div class="products__item__image-holder">
+                                <a href="#"><img src="./images/product_img.jpg" alt="Product"></a>
+                            </div>
+
+                            <div class="products__item__content">
+                                <div class="products__item__title">
+                                    <a href="#">Брюсов, 19</a>
+                                </div>
+
+                                <div class="products__item__type">
+                                    <p>квартиры</p>
+                                </div>
+
+                                <div class="products__item__desc">
+                                    <p>Брюсов, 19 — клубный дом с квартирами и пентхаусами на третьей линии домов от Тверской улицы.</p>
+                                </div>
+
+                                <div class="products__item__price">
+                                    <p>Цена по запросу</p>
+                                </div>
+
+                                <div class="products__item__footer">
+                                    <div class="products__item__place">
+                                        <p>Тверской</p>
+                                    </div>
+
+                                    <div class="products__item__buttons">
+                                        <a href="#" class="button button--s3 button--t1">Узнать подробнее</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="full">
+            <h2 class="full__title">Повний каталог</h2>
+            <a href="#" class="full__button">Скачати каталог</a>
+        </section>
+    </main>
+{% endblock %}
