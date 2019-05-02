@@ -46,7 +46,7 @@ gulp.task('fonts', function () {
 });
 
 gulp.task('js', function() {
-    return gulp.src(['js/jquery.min.js', 'js/slick.min.js', 'js/multirange.js', 'js/main.js'])
+    return gulp.src(['js/jquery.min.js', 'js/slick.min.js', 'js/jquery-ui.min.js', 'js/main.js'])
         .pipe(babel({
             presets: ['@babel/env']
         }))
