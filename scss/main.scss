@@ -447,7 +447,7 @@ a:hover {
       min-height: 25px;
 
       a {
-        color: #001595;
+        color: black;
         font: 24px $fontSemiBold;
         text-decoration: none;
         line-height: 1.1;
@@ -490,16 +490,33 @@ a:hover {
 }
 
 .full {
+  background: #efefef;
   height: 425px;
-  background: url("../images/full_bg.jpg") center center/100% 100% no-repeat;
   margin-bottom: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
+  &__layout {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__image {
+    height: 100%;
+    margin-top: -40px;
+
+    img {
+      height: 100%;
+    }
+
+  }
+
   &__title {
-    color: white;
+    color: black;
     font: 48px "Times New Roman", sans-serif;
     margin-bottom: 30px;
   }
@@ -507,15 +524,16 @@ a:hover {
   &__button {
     height: 50px;
     display: inline-block;
-    background: #3093db;
+    background: white;
     padding: 0 60px;
     font: 24px $font;
-    color: white;
+    color: #111;
     text-decoration: none;
+    box-shadow: 6px 6px 8px rgba(0,0,0,0.1);
     line-height: 50px;
 
     &:hover {
-      color: darkblue;
+      text-decoration: underline;
     }
   }
 }
