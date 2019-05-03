@@ -4863,9 +4863,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 });
 "use strict";
 
-/*! jQuery UI - v1.12.1 - 2019-04-29
+/*! jQuery UI - v1.12.1 - 2019-05-03
 * http://jqueryui.com
-* Includes: widget.js, position.js, data.js, disable-selection.js, focusable.js, form-reset-mixin.js, jquery-1-7.js, keycode.js, labels.js, scroll-parent.js, tabbable.js, unique-id.js, widgets/mouse.js, widgets/slider.js
+* Includes: widget.js, position.js, data.js, disable-selection.js, focusable.js, form-reset-mixin.js, jquery-1-7.js, keycode.js, labels.js, scroll-parent.js, tabbable.js, unique-id.js, widgets/mouse.js, widgets/slider.js, widgets/tabs.js
 * Copyright jQuery Foundation and other contributors; Licensed MIT */
 (function (t) {
   "function" == typeof define && define.amd ? define(["jquery"], t) : t(jQuery);
@@ -5925,32 +5925,416 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         this._keySliding && (this._keySliding = !1, this._stop(e, i), this._change(e, i), this._removeClass(t(e.target), null, "ui-state-active"));
       }
     }
-  });
+  }), t.ui.safeActiveElement = function (t) {
+    var e;
+
+    try {
+      e = t.activeElement;
+    } catch (i) {
+      e = t.body;
+    }
+
+    return e || (e = t.body), e.nodeName || (e = t.body), e;
+  }, t.widget("ui.tabs", {
+    version: "1.12.1",
+    delay: 300,
+    options: {
+      active: null,
+      classes: {
+        "ui-tabs": "ui-corner-all",
+        "ui-tabs-nav": "ui-corner-all",
+        "ui-tabs-panel": "ui-corner-bottom",
+        "ui-tabs-tab": "ui-corner-top"
+      },
+      collapsible: !1,
+      event: "click",
+      heightStyle: "content",
+      hide: null,
+      show: null,
+      activate: null,
+      beforeActivate: null,
+      beforeLoad: null,
+      load: null
+    },
+    _isLocal: function () {
+      var t = /#.*$/;
+      return function (e) {
+        var i, s;
+        i = e.href.replace(t, ""), s = location.href.replace(t, "");
+
+        try {
+          i = decodeURIComponent(i);
+        } catch (n) {}
+
+        try {
+          s = decodeURIComponent(s);
+        } catch (n) {}
+
+        return e.hash.length > 1 && i === s;
+      };
+    }(),
+    _create: function _create() {
+      var e = this,
+          i = this.options;
+      this.running = !1, this._addClass("ui-tabs", "ui-widget ui-widget-content"), this._toggleClass("ui-tabs-collapsible", null, i.collapsible), this._processTabs(), i.active = this._initialActive(), t.isArray(i.disabled) && (i.disabled = t.unique(i.disabled.concat(t.map(this.tabs.filter(".ui-state-disabled"), function (t) {
+        return e.tabs.index(t);
+      }))).sort()), this.active = this.options.active !== !1 && this.anchors.length ? this._findActive(i.active) : t(), this._refresh(), this.active.length && this.load(i.active);
+    },
+    _initialActive: function _initialActive() {
+      var e = this.options.active,
+          i = this.options.collapsible,
+          s = location.hash.substring(1);
+      return null === e && (s && this.tabs.each(function (i, n) {
+        return t(n).attr("aria-controls") === s ? (e = i, !1) : void 0;
+      }), null === e && (e = this.tabs.index(this.tabs.filter(".ui-tabs-active"))), (null === e || -1 === e) && (e = this.tabs.length ? 0 : !1)), e !== !1 && (e = this.tabs.index(this.tabs.eq(e)), -1 === e && (e = i ? !1 : 0)), !i && e === !1 && this.anchors.length && (e = 0), e;
+    },
+    _getCreateEventData: function _getCreateEventData() {
+      return {
+        tab: this.active,
+        panel: this.active.length ? this._getPanelForTab(this.active) : t()
+      };
+    },
+    _tabKeydown: function _tabKeydown(e) {
+      var i = t(t.ui.safeActiveElement(this.document[0])).closest("li"),
+          s = this.tabs.index(i),
+          n = !0;
+
+      if (!this._handlePageNav(e)) {
+        switch (e.keyCode) {
+          case t.ui.keyCode.RIGHT:
+          case t.ui.keyCode.DOWN:
+            s++;
+            break;
+
+          case t.ui.keyCode.UP:
+          case t.ui.keyCode.LEFT:
+            n = !1, s--;
+            break;
+
+          case t.ui.keyCode.END:
+            s = this.anchors.length - 1;
+            break;
+
+          case t.ui.keyCode.HOME:
+            s = 0;
+            break;
+
+          case t.ui.keyCode.SPACE:
+            return e.preventDefault(), clearTimeout(this.activating), this._activate(s), void 0;
+
+          case t.ui.keyCode.ENTER:
+            return e.preventDefault(), clearTimeout(this.activating), this._activate(s === this.options.active ? !1 : s), void 0;
+
+          default:
+            return;
+        }
+
+        e.preventDefault(), clearTimeout(this.activating), s = this._focusNextTab(s, n), e.ctrlKey || e.metaKey || (i.attr("aria-selected", "false"), this.tabs.eq(s).attr("aria-selected", "true"), this.activating = this._delay(function () {
+          this.option("active", s);
+        }, this.delay));
+      }
+    },
+    _panelKeydown: function _panelKeydown(e) {
+      this._handlePageNav(e) || e.ctrlKey && e.keyCode === t.ui.keyCode.UP && (e.preventDefault(), this.active.trigger("focus"));
+    },
+    _handlePageNav: function _handlePageNav(e) {
+      return e.altKey && e.keyCode === t.ui.keyCode.PAGE_UP ? (this._activate(this._focusNextTab(this.options.active - 1, !1)), !0) : e.altKey && e.keyCode === t.ui.keyCode.PAGE_DOWN ? (this._activate(this._focusNextTab(this.options.active + 1, !0)), !0) : void 0;
+    },
+    _findNextTab: function _findNextTab(e, i) {
+      function s() {
+        return e > n && (e = 0), 0 > e && (e = n), e;
+      }
+
+      for (var n = this.tabs.length - 1; -1 !== t.inArray(s(), this.options.disabled);) {
+        e = i ? e + 1 : e - 1;
+      }
+
+      return e;
+    },
+    _focusNextTab: function _focusNextTab(t, e) {
+      return t = this._findNextTab(t, e), this.tabs.eq(t).trigger("focus"), t;
+    },
+    _setOption: function _setOption(t, e) {
+      return "active" === t ? (this._activate(e), void 0) : (this._super(t, e), "collapsible" === t && (this._toggleClass("ui-tabs-collapsible", null, e), e || this.options.active !== !1 || this._activate(0)), "event" === t && this._setupEvents(e), "heightStyle" === t && this._setupHeightStyle(e), void 0);
+    },
+    _sanitizeSelector: function _sanitizeSelector(t) {
+      return t ? t.replace(/[!"$%&'()*+,.\/:;<=>?@\[\]\^`{|}~]/g, "\\$&") : "";
+    },
+    refresh: function refresh() {
+      var e = this.options,
+          i = this.tablist.children(":has(a[href])");
+      e.disabled = t.map(i.filter(".ui-state-disabled"), function (t) {
+        return i.index(t);
+      }), this._processTabs(), e.active !== !1 && this.anchors.length ? this.active.length && !t.contains(this.tablist[0], this.active[0]) ? this.tabs.length === e.disabled.length ? (e.active = !1, this.active = t()) : this._activate(this._findNextTab(Math.max(0, e.active - 1), !1)) : e.active = this.tabs.index(this.active) : (e.active = !1, this.active = t()), this._refresh();
+    },
+    _refresh: function _refresh() {
+      this._setOptionDisabled(this.options.disabled), this._setupEvents(this.options.event), this._setupHeightStyle(this.options.heightStyle), this.tabs.not(this.active).attr({
+        "aria-selected": "false",
+        "aria-expanded": "false",
+        tabIndex: -1
+      }), this.panels.not(this._getPanelForTab(this.active)).hide().attr({
+        "aria-hidden": "true"
+      }), this.active.length ? (this.active.attr({
+        "aria-selected": "true",
+        "aria-expanded": "true",
+        tabIndex: 0
+      }), this._addClass(this.active, "ui-tabs-active", "ui-state-active"), this._getPanelForTab(this.active).show().attr({
+        "aria-hidden": "false"
+      })) : this.tabs.eq(0).attr("tabIndex", 0);
+    },
+    _processTabs: function _processTabs() {
+      var e = this,
+          i = this.tabs,
+          s = this.anchors,
+          n = this.panels;
+      this.tablist = this._getList().attr("role", "tablist"), this._addClass(this.tablist, "ui-tabs-nav", "ui-helper-reset ui-helper-clearfix ui-widget-header"), this.tablist.on("mousedown" + this.eventNamespace, "> li", function (e) {
+        t(this).is(".ui-state-disabled") && e.preventDefault();
+      }).on("focus" + this.eventNamespace, ".ui-tabs-anchor", function () {
+        t(this).closest("li").is(".ui-state-disabled") && this.blur();
+      }), this.tabs = this.tablist.find("> li:has(a[href])").attr({
+        role: "tab",
+        tabIndex: -1
+      }), this._addClass(this.tabs, "ui-tabs-tab", "ui-state-default"), this.anchors = this.tabs.map(function () {
+        return t("a", this)[0];
+      }).attr({
+        role: "presentation",
+        tabIndex: -1
+      }), this._addClass(this.anchors, "ui-tabs-anchor"), this.panels = t(), this.anchors.each(function (i, s) {
+        var n,
+            o,
+            a,
+            r = t(s).uniqueId().attr("id"),
+            l = t(s).closest("li"),
+            h = l.attr("aria-controls");
+        e._isLocal(s) ? (n = s.hash, a = n.substring(1), o = e.element.find(e._sanitizeSelector(n))) : (a = l.attr("aria-controls") || t({}).uniqueId()[0].id, n = "#" + a, o = e.element.find(n), o.length || (o = e._createPanel(a), o.insertAfter(e.panels[i - 1] || e.tablist)), o.attr("aria-live", "polite")), o.length && (e.panels = e.panels.add(o)), h && l.data("ui-tabs-aria-controls", h), l.attr({
+          "aria-controls": a,
+          "aria-labelledby": r
+        }), o.attr("aria-labelledby", r);
+      }), this.panels.attr("role", "tabpanel"), this._addClass(this.panels, "ui-tabs-panel", "ui-widget-content"), i && (this._off(i.not(this.tabs)), this._off(s.not(this.anchors)), this._off(n.not(this.panels)));
+    },
+    _getList: function _getList() {
+      return this.tablist || this.element.find("ol, ul").eq(0);
+    },
+    _createPanel: function _createPanel(e) {
+      return t("<div>").attr("id", e).data("ui-tabs-destroy", !0);
+    },
+    _setOptionDisabled: function _setOptionDisabled(e) {
+      var i, s, n;
+
+      for (t.isArray(e) && (e.length ? e.length === this.anchors.length && (e = !0) : e = !1), n = 0; s = this.tabs[n]; n++) {
+        i = t(s), e === !0 || -1 !== t.inArray(n, e) ? (i.attr("aria-disabled", "true"), this._addClass(i, null, "ui-state-disabled")) : (i.removeAttr("aria-disabled"), this._removeClass(i, null, "ui-state-disabled"));
+      }
+
+      this.options.disabled = e, this._toggleClass(this.widget(), this.widgetFullName + "-disabled", null, e === !0);
+    },
+    _setupEvents: function _setupEvents(e) {
+      var i = {};
+      e && t.each(e.split(" "), function (t, e) {
+        i[e] = "_eventHandler";
+      }), this._off(this.anchors.add(this.tabs).add(this.panels)), this._on(!0, this.anchors, {
+        click: function click(t) {
+          t.preventDefault();
+        }
+      }), this._on(this.anchors, i), this._on(this.tabs, {
+        keydown: "_tabKeydown"
+      }), this._on(this.panels, {
+        keydown: "_panelKeydown"
+      }), this._focusable(this.tabs), this._hoverable(this.tabs);
+    },
+    _setupHeightStyle: function _setupHeightStyle(e) {
+      var i,
+          s = this.element.parent();
+      "fill" === e ? (i = s.height(), i -= this.element.outerHeight() - this.element.height(), this.element.siblings(":visible").each(function () {
+        var e = t(this),
+            s = e.css("position");
+        "absolute" !== s && "fixed" !== s && (i -= e.outerHeight(!0));
+      }), this.element.children().not(this.panels).each(function () {
+        i -= t(this).outerHeight(!0);
+      }), this.panels.each(function () {
+        t(this).height(Math.max(0, i - t(this).innerHeight() + t(this).height()));
+      }).css("overflow", "auto")) : "auto" === e && (i = 0, this.panels.each(function () {
+        i = Math.max(i, t(this).height("").height());
+      }).height(i));
+    },
+    _eventHandler: function _eventHandler(e) {
+      var i = this.options,
+          s = this.active,
+          n = t(e.currentTarget),
+          o = n.closest("li"),
+          a = o[0] === s[0],
+          r = a && i.collapsible,
+          l = r ? t() : this._getPanelForTab(o),
+          h = s.length ? this._getPanelForTab(s) : t(),
+          c = {
+        oldTab: s,
+        oldPanel: h,
+        newTab: r ? t() : o,
+        newPanel: l
+      };
+      e.preventDefault(), o.hasClass("ui-state-disabled") || o.hasClass("ui-tabs-loading") || this.running || a && !i.collapsible || this._trigger("beforeActivate", e, c) === !1 || (i.active = r ? !1 : this.tabs.index(o), this.active = a ? t() : o, this.xhr && this.xhr.abort(), h.length || l.length || t.error("jQuery UI Tabs: Mismatching fragment identifier."), l.length && this.load(this.tabs.index(o), e), this._toggle(e, c));
+    },
+    _toggle: function _toggle(e, i) {
+      function s() {
+        o.running = !1, o._trigger("activate", e, i);
+      }
+
+      function n() {
+        o._addClass(i.newTab.closest("li"), "ui-tabs-active", "ui-state-active"), a.length && o.options.show ? o._show(a, o.options.show, s) : (a.show(), s());
+      }
+
+      var o = this,
+          a = i.newPanel,
+          r = i.oldPanel;
+      this.running = !0, r.length && this.options.hide ? this._hide(r, this.options.hide, function () {
+        o._removeClass(i.oldTab.closest("li"), "ui-tabs-active", "ui-state-active"), n();
+      }) : (this._removeClass(i.oldTab.closest("li"), "ui-tabs-active", "ui-state-active"), r.hide(), n()), r.attr("aria-hidden", "true"), i.oldTab.attr({
+        "aria-selected": "false",
+        "aria-expanded": "false"
+      }), a.length && r.length ? i.oldTab.attr("tabIndex", -1) : a.length && this.tabs.filter(function () {
+        return 0 === t(this).attr("tabIndex");
+      }).attr("tabIndex", -1), a.attr("aria-hidden", "false"), i.newTab.attr({
+        "aria-selected": "true",
+        "aria-expanded": "true",
+        tabIndex: 0
+      });
+    },
+    _activate: function _activate(e) {
+      var i,
+          s = this._findActive(e);
+
+      s[0] !== this.active[0] && (s.length || (s = this.active), i = s.find(".ui-tabs-anchor")[0], this._eventHandler({
+        target: i,
+        currentTarget: i,
+        preventDefault: t.noop
+      }));
+    },
+    _findActive: function _findActive(e) {
+      return e === !1 ? t() : this.tabs.eq(e);
+    },
+    _getIndex: function _getIndex(e) {
+      return "string" == typeof e && (e = this.anchors.index(this.anchors.filter("[href$='" + t.ui.escapeSelector(e) + "']"))), e;
+    },
+    _destroy: function _destroy() {
+      this.xhr && this.xhr.abort(), this.tablist.removeAttr("role").off(this.eventNamespace), this.anchors.removeAttr("role tabIndex").removeUniqueId(), this.tabs.add(this.panels).each(function () {
+        t.data(this, "ui-tabs-destroy") ? t(this).remove() : t(this).removeAttr("role tabIndex aria-live aria-busy aria-selected aria-labelledby aria-hidden aria-expanded");
+      }), this.tabs.each(function () {
+        var e = t(this),
+            i = e.data("ui-tabs-aria-controls");
+        i ? e.attr("aria-controls", i).removeData("ui-tabs-aria-controls") : e.removeAttr("aria-controls");
+      }), this.panels.show(), "content" !== this.options.heightStyle && this.panels.css("height", "");
+    },
+    enable: function enable(e) {
+      var i = this.options.disabled;
+      i !== !1 && (void 0 === e ? i = !1 : (e = this._getIndex(e), i = t.isArray(i) ? t.map(i, function (t) {
+        return t !== e ? t : null;
+      }) : t.map(this.tabs, function (t, i) {
+        return i !== e ? i : null;
+      })), this._setOptionDisabled(i));
+    },
+    disable: function disable(e) {
+      var i = this.options.disabled;
+
+      if (i !== !0) {
+        if (void 0 === e) i = !0;else {
+          if (e = this._getIndex(e), -1 !== t.inArray(e, i)) return;
+          i = t.isArray(i) ? t.merge([e], i).sort() : [e];
+        }
+
+        this._setOptionDisabled(i);
+      }
+    },
+    load: function load(e, i) {
+      e = this._getIndex(e);
+
+      var s = this,
+          n = this.tabs.eq(e),
+          o = n.find(".ui-tabs-anchor"),
+          a = this._getPanelForTab(n),
+          r = {
+        tab: n,
+        panel: a
+      },
+          l = function l(t, e) {
+        "abort" === e && s.panels.stop(!1, !0), s._removeClass(n, "ui-tabs-loading"), a.removeAttr("aria-busy"), t === s.xhr && delete s.xhr;
+      };
+
+      this._isLocal(o[0]) || (this.xhr = t.ajax(this._ajaxSettings(o, i, r)), this.xhr && "canceled" !== this.xhr.statusText && (this._addClass(n, "ui-tabs-loading"), a.attr("aria-busy", "true"), this.xhr.done(function (t, e, n) {
+        setTimeout(function () {
+          a.html(t), s._trigger("load", i, r), l(n, e);
+        }, 1);
+      }).fail(function (t, e) {
+        setTimeout(function () {
+          l(t, e);
+        }, 1);
+      })));
+    },
+    _ajaxSettings: function _ajaxSettings(e, i, s) {
+      var n = this;
+      return {
+        url: e.attr("href").replace(/#.*$/, ""),
+        beforeSend: function beforeSend(e, o) {
+          return n._trigger("beforeLoad", i, t.extend({
+            jqXHR: e,
+            ajaxSettings: o
+          }, s));
+        }
+      };
+    },
+    _getPanelForTab: function _getPanelForTab(e) {
+      var i = t(e).attr("aria-controls");
+      return this.element.find(this._sanitizeSelector("#" + i));
+    }
+  }), t.uiBackCompat !== !1 && t.widget("ui.tabs", t.ui.tabs, {
+    _processTabs: function _processTabs() {
+      this._superApply(arguments), this._addClass(this.tabs, "ui-tab");
+    }
+  }), t.ui.tabs;
 });
 "use strict";
 
 $(document).ready(function () {
-  $("[data-slider]").slick({
+  var slider = $("[data-slider]");
+  var productSlider = $("[data-product-slider]");
+  var productSliderNav = $("[data-product-slider-nav]");
+  var priceRange = $("#price-range");
+  var priceAmount = $("#price-amount");
+  var priceRange2 = $("#price-range2");
+  var priceAmount2 = $("#price-amount2");
+  var productTabs = $("[data-product-tabs]");
+  slider.slick({
     dots: true
   });
-  $("#price-range").slider({
-    range: true,
-    min: 0,
-    max: 500,
-    values: [75, 300],
-    slide: function slide(event, ui) {
-      $("#price-amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
-    }
+  productSlider.slick({
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    dots: false,
+    fade: true,
+    asNavFor: productSliderNav
   });
-  $("#price-amount").val("$" + $("#price-range").slider("values", 0) + " - $" + $("#price-range").slider("values", 1));
-  $("#price-range2").slider({
-    range: true,
-    min: 0,
-    max: 20,
-    values: [2, 15],
-    slide: function slide(event, ui) {
-      $("#price-amount2").val(ui.values[0] + " - " + ui.values[1]);
-    }
+  productSliderNav.slick({
+    slidesToShow: 7,
+    slidesToScroll: 1,
+    asNavFor: productSlider,
+    focusOnSelect: true
   });
-  $("#price-amount2").val($("#price-range2").slider("values", 0) + " - " + $("#price-range2").slider("values", 1));
+  productTabs.tabs({
+    disabled: [1, 1]
+  });
+
+  function initRange(range, amount, values, min, max, currency) {
+    range.slider({
+      range: true,
+      min: min,
+      max: max,
+      values: values,
+      slide: function slide(event, ui) {
+        amount.val((currency ? "$" : ' ') + ui.values[0] + (currency ? " - $" : ' - ') + ui.values[1]);
+      }
+    });
+    amount.val((currency ? "$" : ' ') + range.slider("values", 0) + (currency ? " - $" : ' - ') + range.slider("values", 1));
+  }
+
+  initRange(priceRange, priceAmount, [75, 300], 0, 500, true);
+  initRange(priceRange2, priceAmount2, [0, 12], 1, 15, false);
 });

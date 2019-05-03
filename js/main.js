@@ -1,29 +1,52 @@
 $(document).ready(function () {
-    $("[data-slider]").slick({
+	const slider = $("[data-slider]");
+	const productSlider = $("[data-product-slider]");
+	const productSliderNav = $("[data-product-slider-nav]");
+	const priceRange = $("#price-range");
+	const priceAmount = $("#price-amount");
+	const priceRange2 = $("#price-range2");
+	const priceAmount2 = $("#price-amount2");
+	const productTabs = $("[data-product-tabs]");
+
+    slider.slick({
 		dots: true
 	});
 
-	$( "#price-range" ).slider({
-		range: true,
-		min: 0,
-		max: 500,
-		values: [ 75, 300 ],
-		slide: function( event, ui ) {
-			$( "#price-amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-		}
+    productSlider.slick({
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		arrows: false,
+		dots: false,
+		fade: true,
+		asNavFor: productSliderNav
 	});
-	$( "#price-amount" ).val( "$" + $( "#price-range" ).slider( "values", 0 ) +
-		" - $" + $( "#price-range" ).slider( "values", 1 ) );
 
-	$( "#price-range2" ).slider({
-		range: true,
-		min: 0,
-		max: 20,
-		values: [ 2, 15 ],
-		slide: function( event, ui ) {
-			$( "#price-amount2" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-		}
+    productSliderNav.slick({
+		slidesToShow: 7,
+		slidesToScroll: 1,
+		asNavFor: productSlider,
+		focusOnSelect: true
 	});
-	$( "#price-amount2" ).val( $( "#price-range2" ).slider( "values", 0 ) +
-		" - " + $( "#price-range2" ).slider( "values", 1 ) );
+
+    productTabs.tabs({
+		disabled: [1, 1]
+	});
+
+    function initRange(range, amount, values, min, max, currency) {
+		range.slider({
+			range: true,
+			min: min,
+			max: max,
+			values: values,
+			slide: function( event, ui ) {
+				amount.val( (currency ? "$" : ' ') + ui.values[ 0 ] + (currency ? " - $" : ' - ') + ui.values[ 1 ] );
+			}
+		});
+		amount.val( (currency ? "$" : ' ') + range.slider( "values", 0 ) +
+			(currency ? " - $" : ' - ') + range.slider( "values", 1 ) );
+	}
+
+
+	initRange(priceRange, priceAmount, [ 75, 300 ], 0, 500, true);
+	initRange(priceRange2, priceAmount2, [ 0, 12 ], 1, 15, false);
 });
