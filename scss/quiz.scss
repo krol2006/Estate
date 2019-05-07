@@ -4,12 +4,14 @@
   max-width: 740px;
   width: 100%;
   border-radius: 5px;
+  overflow: hidden;
   position: absolute;
   left: 0;
   right: 0;
   margin: auto;
   top: -1000px;
   transition: all 200ms;
+  padding-top: 99px;
   z-index: 300;
 
   &--opened {
@@ -44,18 +46,45 @@
 
 .sv_progress {
   height: 30px;
-  border: 1px solid #eee;
   position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #dedede;
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.3) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.3) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+  background-size: 30px 30px;
 }
 
 .sv_progress_bar {
   position: absolute;
   top: 0;
   bottom: 0;
-  background: #eee;
+  background: $colorMain;
   transition: width 900ms;
+}
+
+.sv_q_description {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 99px;
+  width: 100%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+  }
+}
+
+.sv_body {
+  padding: 20px;
+}
+
+.sv_qstn {
+  overflow: hidden !important;
 }
 
 #quizHolder {
   height: 100%;
+  max-width: 480px;
 }
