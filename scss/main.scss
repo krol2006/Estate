@@ -135,6 +135,14 @@ a:hover {
   height: 600px;
   overflow: hidden;
   margin-top: -65px;
+
+  [data-slider] {
+    visibility: hidden;
+
+    &.slick-initialized {
+      visibility: visible;
+    }
+  }
   
   &__caption {
     position: absolute;
@@ -241,9 +249,10 @@ a:hover {
   &__item {
     position: relative;
 
-    img {
+    &__image {
       height: 100%;
       width: 100%;
+      object-fit: cover;
     }
 
     &:focus {

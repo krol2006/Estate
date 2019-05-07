@@ -9,6 +9,8 @@ const concat = require('gulp-concat');
 const html = require('gulp-nunjucks-render');
 const gcmq = require('gulp-group-css-media-queries');
 const wait = require('gulp-wait');
+const order = require('gulp-order');
+let uglify = require('gulp-uglify-es').default;
 
 gulp.task('server', function() {
     browserSync.init({
@@ -46,12 +48,11 @@ gulp.task('fonts', function () {
 });
 
 gulp.task('js', function() {
-    return gulp.src(['js/jquery.min.js', 'js/slick.min.js', 'js/jquery-ui.min.js', 'js/main.js'])
-        .pipe(babel({
-            presets: ['@babel/env']
-        }))
+    return gulp.src('js/*.js')
+        //.pipe(order(['js/jquery.min.js', 'js/survey.jquery.min.js', 'js/showdown.min.js',  'js/quiz.js', 'js/jquery-ui.min.js', 'js/slick.min.js', 'js/main.js']))
+        .pipe(uglify())
         .pipe(concat('bundle.js'))
-        .pipe(minify())
+        //.pipe(minify())
         .pipe(gulp.dest('dist/js'))
         .pipe(browserSync.stream());
 });
@@ -73,6 +74,6 @@ gulp.task('watch', function() {
     gulp.watch('fonts/*', ['fonts']);
 });
 
-gulp.task('compile', ['html', 'sass', 'js', 'img', 'fonts']);
-gulp.task('default', ['server', 'watch', 'html', 'sass', 'js', 'img', 'fonts']);
+gulp.task('compile', ['html', 'sass', 'img', 'fonts']);
+gulp.task('default', ['server', 'watch', 'html', 'sass', 'img', 'fonts']);
 

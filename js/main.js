@@ -7,6 +7,15 @@ $(document).ready(function () {
 	const priceRange2 = $("#price-range2");
 	const priceAmount2 = $("#price-amount2");
 	const productTabs = $("[data-product-tabs]");
+	const quiz = $("[data-quiz]");
+	const quizOpen = $("[data-quiz-open]");
+	const quizClose = $("[data-quiz-close]");
+
+	quiz.on('click', function (e) {
+		e.preventDefault();
+
+		quizOpen.addClass('quiz--opened');
+	});
 
     slider.slick({
 		dots: true

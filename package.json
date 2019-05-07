@@ -13,6 +13,7 @@
     "gulp-cli": "^2.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-group-css-media-queries": "^1.2.2",
+    "gulp-imagemin": "^5.0.3",
     "gulp-minify": "^3.1.0",
     "gulp-nunjucks-render": "^2.2.2",
     "gulp-plumber": "^1.2.0",
@@ -20,7 +21,10 @@
     "gulp-tinypng": "^1.0.2",
     "gulp-uglify": "^3.0.1",
     "gulp-wait": "^0.0.2",
-    "gulp-zip": "^4.2.0",
-    "gulp-imagemin": "^5.0.3"
+    "gulp-zip": "^4.2.0"
+  },
+  "dependencies": {
+    "gulp-order": "^1.2.0",
+    "gulp-uglify-es": "^1.0.4"
   }
 }
