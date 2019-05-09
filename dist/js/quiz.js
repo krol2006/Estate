@@ -14,6 +14,9 @@ $(document).ready(function () {
         pagePrevText: "Назад",
         pageNextText: "Вперед",
         completeText: "Завершити",
+        getProgress: function(e) {
+            console.log(e);
+        },
         pages: [
             {
                 title: "Питання: {pageno} із {pagecount}.",
@@ -137,6 +140,20 @@ $(document).ready(function () {
     //         $.post('/url', quiz.data);
     //     }
     // });
+
+    survey.onCurrentPageChanged.add(function (e) {
+        const progress = $(".sv_progress_bar")[0].style.width;
+        $(".sv_progress_bar").attr('data-width', progress);
+    });
+
+    survey.onAfterRenderSurvey.add(function (e) {
+        const progress = $(".sv_progress_bar")[0].style.width;
+        $(".sv_progress_bar").attr('data-width', progress);
+    })
+
+
+
+
 
     const converter = new showdown.Converter();
 

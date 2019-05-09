@@ -17,11 +17,15 @@ $(document).ready(function () {
 
 		quiz.addClass('quiz--opened');
 		quizOverlay.addClass('quiz__overlay--opened');
+		$('html').css('overflow', 'hidden');
+		$('body').css('overflow-y', 'scroll');
 	});
 
 	quizClose.on('click', function () {
 		quiz.removeClass('quiz--opened');
 		quizOverlay.removeClass('quiz__overlay--opened');
+		$('html').css('overflow', '');
+		$('body').css('overflow-y', '');
 	});
 
     slider.slick({

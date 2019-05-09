@@ -1,0 +1,21 @@
+@keyframes shine {
+  0%,59% {
+    opacity: 0;
+    transform: rotateZ(60deg) translate(-5em,7.5em)
+  }
+
+  60% {
+    opacity: 1;
+    transform: rotateZ(60deg) translate(-5em,7.5em)
+  }
+
+  80% {
+    opacity: 1;
+    transform: rotateZ(60deg) translate(1em,-11em)
+  }
+
+  100% {
+    opacity: 0;
+    transform: rotateZ(60deg) translate(1em, -11em)
+  }
+}
